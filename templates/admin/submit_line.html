@@ -1,0 +1,12 @@
+{% load i18n %}
+<div class="row-fluid well" style="margin-top: 5px;">
+    <div class="span9">
+{% if show_save %}<input type="submit" value="{% trans 'Save' %}" class="btn btn-primary" name="_save" {{ onclick_attrib }}/>{% endif %}
+{% if show_save_as_new %}<input type="submit" value="{% trans 'Save as new' %}" name="_saveasnew" class="btn btn-primary" {{ onclick_attrib }}/>{%endif%}
+{% if show_save_and_add_another %}<input type="submit" value="{% trans 'Save and add another' %}" class="btn btn-primary" name="_addanother" {{ onclick_attrib }} />{% endif %}
+{% if show_save_and_continue %}<input type="submit" value="{% trans 'Save and continue editing' %}" class="btn btn-primary" name="_continue" {{ onclick_attrib }}/>{% endif %}
+</div>
+<div class="pull-right">
+{% if show_delete_link %}<a href="delete/" class="btn btn-danger">{% trans "Delete" %}</a>{% endif %}
+</div>
+</div>
