@@ -1,0 +1,8 @@
+/* CSS PARA AS TABELAS DAS JANELAS MODAIS ================================================================= */
+div.modal-body #id_descricao, div.modal-body #id_ata{
+	width: 95% !important;
+	height: 46px !important;
+}
+div.modal-body a[id^="calendarlink"], div.modal-body a[id^="clocklink"]{
+	display: none;
+}

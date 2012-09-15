@@ -1,0 +1,9 @@
+﻿/* CSS para a div dos actions*/
+div.actions {
+	/* Zerando as configuracoes anteriores */
+	border: none !important;
+	background-image: none !important;
+	background-color: #FFFFFF !important;
+	margin-right: auto !important;
+	float: right !important;
+}
