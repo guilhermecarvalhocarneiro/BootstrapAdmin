@@ -1,6 +1,29 @@
-{% load i18n admin_static %}
+{% load i18n admin_static admin_list %}
+{% if cl.has_filters or cl.search_fields %}
+<div class="row-fluid well">
+    <!--div -->
+
+ <!-- Blocos dos filtros -->
+      {% block filters %}
+        {% if cl.has_filters %}
+        <div class="btn-group" style="float:left; margin: 0  20px 0 5px; ">
+          <a class="btn btn-info dropdown-toggle" data-toggle="dropdown" data-target="#" href="path/to/page.html">
+            <i class="icon-search icon-white"></i>
+              <strong>{% trans 'Filter' %}</strong>
+                <b class="caret"></b>
+          </a>
+          <ul id="ul-filtro" class="dropdown-menu">
+             <li>{% for spec in cl.filter_specs %}{% admin_list_filter cl spec %}{% endfor %}</li> 
+          </ul>     
+        </div>
+        {% endif %}
+      {% endblock %}
+  <!-- fim do bloco dos filtros --> 
+
+<!-- </div>
+<div class="span10"> -->
 {% if cl.search_fields %}
-<div><form id="changelist-search" action="" method="get" class="row-fluid well form-search">
+<div style="float:left;"><form id="changelist-search" action="" method="get" class="row-fluid form-search">
 <div><!-- DIV needed for valid HTML -->
 <!-- label for="searchbar"><img src="{% static "admin/img/icon_searchbox.png" %}" alt="Search" /></label -->
 <input type="text" size="40" name="{{ search_var }}" value="{{ cl.query }}" id="searchbar" />
@@ -15,3 +38,6 @@
 </form></div>
 <script type="text/javascript">document.getElementById("searchbar").focus();</script>
 {% endif %}
+</div>
+{% endif %}
+<!--/div -->

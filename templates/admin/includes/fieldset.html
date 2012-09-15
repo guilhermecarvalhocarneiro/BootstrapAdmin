@@ -19,7 +19,11 @@
                         {% endif %}
                     {% endif %}
                     {% if field.field.help_text %}
-                        <span class="label label-info">{{ field.field.help_text|safe }}</span>
+                    <!-- Label contendo os help texts
+                    Adicionar aqui se possível um botão trazendo o Popover com o conteúdo. -->
+                        <a href="#" class="btn btn-small" rel="popover" data-content="{{ field.field.help_text }}" data-original-title="Ajuda"><i class="icon icon-question-sign"></i></a>
+
+                        <!-- <span class="label label-info">{{ field.field.help_text|safe }}</span> -->
                     {% endif %}
                     {% if not line.fields|length_is:'1' and not field.is_readonly %}
                     	{% if field.errors|striptags|first != '' %}

@@ -1,4 +1,5 @@
 {% if show %}
+{% if back %}
 <div class="row-fluid">
 <ul class="breadcrumb" style="margin: 3px 0 5px;">
 {% if back %}<li class="date-back"><a href="{{ back.link }}">&lsaquo; {{ back.title }}</a><span class="divider">|</span></li>{% endif %}
@@ -7,4 +8,5 @@
 {% endfor %}
 </ul>
 </div>
+{% endif %}
 {% endif %}

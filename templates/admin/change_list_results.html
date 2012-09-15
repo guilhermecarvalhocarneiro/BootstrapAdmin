@@ -9,19 +9,29 @@
 <div class="results" style="margin-right: 2px !important;">
   <table id="result_list" class="table table-bordered table-striped">
   <thead>
+    <!-- tr><td colspan="{{ results.0|length }}"></td></tr -->
     <tr>
     {% for header in result_headers %}
     <th scope="col" {{ header.class_attrib }}>
-       {% if header.sortable %}
-         {% if header.sort_priority > 0 %}
-           <div class="sortoptions">
-             <a class="sortremove" href="{{ header.url_remove }}" title="{% trans "Remove from sorting" %}"></a>
-             {% if num_sorted_fields > 1 %}<span class="sortpriority" title="{% blocktrans with priority_number=header.sort_priority %}Sorting priority: {{ priority_number }}{% endblocktrans %}">{{ header.sort_priority }}</span>{% endif %}
-             <a href="{{ header.url_toggle }}" class="toggle {% if header.ascending %}ascending{% else %}descending{% endif %}" title="{% trans "Toggle sorting" %}"></a>
-           </div>
+       <div class="text">
+        {% if header.sortable %}
+          {% if header.sort_priority == 0 %} 
+            <a href="{{ header.url_primary }}">{{ header.text|capfirst }}</a>
+          {% else %}
+             <div class="btn-group">
+              <a class="btn btn-small" href="{{ header.url_primary }}">{{ header.text|capfirst }} 
+                {% if header.ascending %}<i class="icon-chevron-up"></i>{% else %}<i class="icon-chevron-down"></i>{% endif %}
+              </a>              
+              <a class="sortremove btn btn-small btn-success" href="{{ header.url_remove }}" title="{% trans "Remove from sorting" %}"><i class="icon-remove-sign"></i></a>
+             </div>             
+             <!-- Elemento que demonstra por que coluna a ordenacao foi feita -->
+             <!-- span class="sortpriority" title="{% blocktrans with priority_number=header.sort_priority %}Sorting priority: {{ priority_number }}{% endblocktrans %}" -->
+             <!-- /span -->
+             <!-- a href="{{ header.url_toggle }}" class="toggle {% if header.ascending %}ascending{% else %}descending{% endif %}" title="{% trans "Toggle sorting" %}"></a -->           
          {% endif %}
-       {% endif %}
-       <div class="text">{% if header.sortable %}<a href="{{ header.url_primary }}">{{ header.text|capfirst }}</a>{% else %}<span>{{ header.text|capfirst }}</span>{% endif %}</div>
+        {% else %}<span>{{ header.text|capfirst }}</span>
+        {% endif %}
+       </div>
        <div class="clear"></div>
     </th>{% endfor %}
     </tr>

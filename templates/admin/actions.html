@@ -1,31 +1,21 @@
 {% load i18n %}
-<div class="row-fluid">
-    <div class="span12">
-        {% for field in action_form %}
-            {% if field.label %}<strong>{{ field.label }}</strong>{% endif %}
-        {% endfor %}
-        <div class="row-fluid">
-            <div class="span6">
-                {% for field in action_form %}
-                    {{ field }}
-                {% endfor %}
-                <button type="submit" class="btn btn-primary" title="{% trans "Run the selected action" %}" name="index" value="{{ action_index|default:0 }}">{% trans "Go" %}</button>
-            </div>
-            <div class="span6">
-                {% if actions_selection_counter %}
-                <div class="alert alert-success">
-                    <script type="text/javascript">var _actions_icnt="{{ cl.result_list|length|default:"0" }}";</script>
-                    <span class="action-counter">{{ selection_note }}</span>
-                    {% if cl.result_count != cl.result_list|length %}
-                        <span class="all">{{ selection_note_all }}</span>
-                        <span class="question">
-                        <a href="javascript:;" title="{% trans "Click here to select the objects across all pages" %}">{% blocktrans with cl.result_count as total_count %}Select all {{ total_count }} {{ module_name }}{% endblocktrans %}</a>
-                    </span>
-                    <span class="clear"><a href="javascript:;">{% trans "Clear selection" %}</a></span>
-                        {% endif %}
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-    </div>    
+<div style="float:left;">
+    {% for field in action_form %}
+        {% if field.label %}<strong>{{ field.label }}</strong>{% endif %}
+        {{ field }}
+    {% endfor %}
+    <button type="submit" class="btn btn-primary" title="{% trans "Run the selected action" %}" name="index" value="{{ action_index|default:0 }}">{% trans "Go" %}</button>
+</div>
+<div class="actions" style="float:left; width:58% !important; background-color: transparent !important; margin:0 !important; padding:0 !important; ">
+	{% if actions_selection_counter %}
+        <script type="text/javascript">var _actions_icnt="{{ cl.result_list|length|default:"0" }}";</script>
+        <span class="label label-info action-counter">{{ selection_note }}</span>
+        {% if cl.result_count != cl.result_list|length %}
+            <span class="label label-info all">{{ selection_note_all }}</span>
+            <span class="question">
+            	<a href="javascript:;" alt="Limpar seleção" class="btn btn-mini" title="{% trans "Click here to select the objects across all pages" %}"><i class="icon-check"></i> {% blocktrans with cl.result_count as total_count %}Select all {{ total_count }} {{ module_name }}{% endblocktrans %}</a>
+        	</span>
+        <span class="clear"><a href="javascript:;" title="Limpar Seleção" class="btn btn-warning btn-mini"><i class="icon-remove"></i> </a></span>
+            {% endif %}
+        {% endif %}
 </div>

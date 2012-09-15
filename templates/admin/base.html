@@ -1,18 +1,39 @@
 {% load admin_static %}{% load url from future %}<!DOCTYPE html>
 <html lang="{{ LANGUAGE_CODE|default:"en-us" }}" {% if LANGUAGE_BIDI %}dir="rtl"{% endif %}>
 <head>
+<meta name="title" content="Advogaweb | Seu software Jurídico on-line" />
+<meta name="description" content="O Advogaweb é um software jurídico totalmente on-line, que proporciona aos clientes um gerenciamento completo" />
+
 <title>{% block title %}{% endblock %}</title>
 <!-- link rel="stylesheet" type="text/css" href="{% block stylesheet %}{% static "admin/css/base.css" %}{% endblock %}" / -->
 {% block extrastyle %}
 <link href="{% static "bootstrap/css/bootstrap.css"%}" rel="stylesheet" type="text/css" />
-<link href="{% static "base/css/jquery-ui-calendar.custom.css"%}" rel="stylesheet" type="text/css" />
+<link href="{% static "base/css/jquery-ui-1.8.21.custom.css"%}" rel="stylesheet" type="text/css" />
 {% endblock %}
+
 <!--[if lte IE 7]><link rel="stylesheet" type="text/css" href="{% block stylesheet_ie %}{% static "admin/css/ie.css" %}{% endblock %}" /><![endif]-->
 {% if LANGUAGE_BIDI %}<link rel="stylesheet" type="text/css" href="{% block stylesheet_rtl %}{% static "admin/css/rtl.css" %}{% endblock %}" />{% endif %}
 <script type="text/javascript">window.__admin_media_prefix__ = "{% filter escapejs %}{% static "admin/" %}{% endfilter %}";</script>
 {% block extrahead %}
 {% endblock %}
 {% block blockbots %}<meta name="robots" content="NONE,NOARCHIVE" />{% endblock %}
+<!-- SCRIPT Analytics -->
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-33318928-1']);
+  _gaq.push(['_setDomainName', 'advogaweb.net.br']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+<!-- Final do Script -->
+
 </head>
 {% load i18n %}
 
@@ -26,14 +47,15 @@
         <div class="navbar navbar-fixed-top">
           <div class="navbar-inner">
             <div class="container-fluid">
-                {% block branding %}{% endblock %}                           
+                {% block branding %}{% endblock %}
                 <ul class="nav pull-right">
                     {% if user.is_active and user.is_staff %}
-                        <li style="margin-top:10px;">{% trans 'Welcome,' %} <strong>{% filter force_escape %}{% firstof user.first_name user.username %}{% endfilter %}</strong>.</li>
                         <li class="divider-vertical"></li>
+                        <li style="margin-top:10px;">{% trans 'Welcome,' %}</li>                        
                         <li class="dropdown">
                             <a class="dropdown-toggle" data-toggle="dropdown" data-target="#" href="path/to/page.html">
-                                Opera&ccedil;&otilde;es
+                                <i class="icon-user icon-white"></i>
+                                <strong>{% filter force_escape %}{% firstof user.first_name user.username %}{% endfilter %}</strong>
                                 <b class="caret"></b>
                             </a>
                             <ul class="dropdown-menu">
@@ -48,8 +70,52 @@
                         </li>                        
                     {% endif %}            
                 </ul>
-            </div>
+            </div>            
           </div>
+          {% if user.is_active and user.is_staff %}
+          <!--  Adicionando a barra de menu horizontal -->
+          <div class="navbar" id="barra_menu_horizontal">
+              <div class="navbar-inner" id="itens_barra_menu_horizontal">
+                  <div id="conteudo_itens_barra_menu_horizontal">
+                      <ul class="nav">
+                      	<li class="divider-vertical"></li>
+                      	<!--  Fazer o looping pelas apps do usuario logado -->
+                      	{% for app in adm_app_list %}
+                      		<li class="dropdown" id="item_menu_{{app.name}}">
+                      			<a href="#" class="dropdown-toggle" data-toggle="dropdown" data-target="3">{% blocktrans with name=app.name %}{{ name }}{% endblocktrans %}</a>
+                      			{% if app.name|lower == 'processo' %}
+                      				<!--  tratando do tamanho do ul para os de processo serem mostrados em duas colunas -->
+                      				<ul class="dropdown-menu" style="width: 495px !important;">
+                      					{% for model in app.models|dictsort:"name" %}
+                      						{% cycle 'left' 'right' as alinhamento silent %}
+		                      				<li style="width:50% !important; float:{{ alinhamento }} !important; display:block; "><a href="{{ model.admin_url }}">{{ model.name }}</a></li>
+	        	              			{% endfor %}
+                      				</ul>                            
+                      			{% else %}
+	                      			<ul class="dropdown-menu">                                
+	                      				{% for model in app.models|dictsort:"name" %}                                
+                                  {% if not user.is_superuser %}
+                                  <!-- Verificando se o usuário logado não é superuser para ocultar a App User -->
+                                    {% if model.name|lower != 'usuários' %}
+                                    <!-- Verificando se a app é usuários para ocultar -->
+		                      				    <li><a href="{{ model.admin_url }}">{{ model.name }}</a></li>
+                                    {% endif %}
+                                  {% else %}
+                                    <li><a href="{{ model.admin_url }}">{{ model.name }}</a></li>
+                                  {% endif %}
+	        	              			{% endfor %}
+	                      			</ul>
+                      			{% endif %}
+                      		</li>
+                      		<li class="divider-vertical"></li>
+                      	{% empty %}
+                      		<li>Sem permiss&atilde;0</li>
+                      	{% endfor %}	
+                      </ul>
+                  </div>
+              </div>	
+          </div>
+          {% endif %}
         {% block nav-global %}{% endblock %}
         </div>
     </div>    
@@ -77,12 +143,11 @@
                     </div>
                     {% endif %}
                 {% endblock messages %}
-            </div>            
+            </div>
             <div id="content_content">            	
-            	<div class="row span10">
+            	<div class="row span12">
             		{% block pretitle %}{% endblock %}
 	                <!-- Bloco para os títulos das páginas -->
-	                {% block content_title %}{% if title %}<h1>{{ title }}</h1>{% endif %}{% endblock %}
 	                {% block content %}
 	                {% block object-tools %}{% endblock %}
 	                {{ content }}
@@ -99,16 +164,22 @@
 <!-- END Container -->
 
 <!-- Chamada para os arquivo JS -->
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js"></script>
+<!-- script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js"></script -->
+
+<script type="text/javascript" src="{% static "base/js/jquery-1.7.2.min.js"%}"></script>
+<script type="text/javascript" src="{% static "base/js/jquery-ui-1.8.21.custom.min.js"%}"></script>
+
 <script type="text/javascript" src="{% static "base/js/mascara.js"%}"></script>
-<script type="text/javascript" src="{% static "base/js/interface.js"%}"></script>
+<script type="text/javascript" src="{% static "interface/js/interface.js"%}"></script>
+<script type="text/javascript" src="{% static "interface/js/jquery-ui-calendar.custom.min.js"%}"></script>
 <script type="text/javascript" src="{% static "bootstrap/js/bootstrap.min.js"%}"></script>
 <script type="text/javascript" src="{% static "bootstrap/js/bootstrap-dropdown.js"%}"></script>
 <script type="text/javascript" src="{% static "bootstrap/js/bootstrap-collapsed.js"%}"></script>
 <script type="text/javascript" src="{% static "bootstrap/js/bootstrap-tabs.js"%}"></script>
-<script type="text/javascript" src="{% static "base/js/jquery-ui-calendar.custom.min.js"%}"></script>
-<script type="text/javascript" src="{% static "js/call_bootstrap_js.js"%}"></script>
+<script type="text/javascript" src="{% static "bootstrap/js/bootstrap-tooltip.js"%}"></script>
+<script type="text/javascript" src="{% static "bootstrap/js/bootstrap-init.js"%}"></script>
+<script type="text/javascript" src="{% static "base/js/chamada-bootstrap.js"%}"></script>
 {% block extra_js %}
 {% endblock %}
 </body>
