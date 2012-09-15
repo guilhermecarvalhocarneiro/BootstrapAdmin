@@ -1,0 +1,47 @@
+/*CSS para a impressao*/
+@media print{
+	div#header, div#menu_superior, div#breadcrumbs, div#div_filtro_processo{height: 1px !important; display:none !important;}
+	form#form_filtro_processo{visibility: hidden !important;}	
+	.tabela_relatorio{margin-top: 0 !important;}
+}
+.tabela_relatorio{margin-top:30px;}
+.td_relatorio_esquerda, .td_relatorio_direita{
+	border-color: #c3c3c3;
+	border-width: 1px;
+	border-style: solid;
+	border-left: #c3c3c3 1px solid !important;
+	border-bottom: #c3c3c3 1px solid !important;
+}
+.tabela_dados_relatorio{
+    width: 100%;
+}
+.tabela_dados_relatorio tr th{
+	text-align: left;
+}
+.tabela_dados_relatorio tr th:first-child{
+	/*width: 350px;*/
+}
+.tabela_dados_relatorio tr td{
+	vertical-align: top;
+}
+.tabela_dados_relatorio tr td, .tabela_dados_relatorio tr th{
+	margin-top: 0 !important;
+	padding-top:0 !important;
+	margin-bottom: 0 !important;
+	padding-bottom: 0 !important;
+	border:none !important;
+}
+.td_relatorio_direita{
+	border-left: none !important;
+}
+.td_limpa{height: 3px; border: none;}
+
+.td_titulo{
+	padding: 0 !important;
+	margin: 0 !important;
+	font-weight: bold;
+	border: none !important;
+}
+tr.linha_1 td, tr.linha_2 td{padding-top: 8px !important; padding-bottom: 8px !important;}
+tr.linha_1 td{background-color: #F5F5F5 !important; }
+tr.linha_2 td{background-color: transparent;}
